@@ -1,32 +1,20 @@
 library(shiny)
 library(googleway)
 
-# This line is necessary for wherever you move the rate_explorer project to
-# You can find out where R is actually pointed at any time with getwd()
-setwd('//fs-stl-1/DATA/Business Intelligence/Analytics Projects/rate_explorer')
-
-### NEXT STEPS ###
-# Hit DW_PA.dbo.TRANSCORE_DATA_RAW to fetch weekly rates on lane
-# Use kma_repcity and kma_zip to filter correctly,
-# OR use dw2.dbo.ZiptoZoneHighway.  Test for perormance obvi.
-kma_repcity <- read.csv('kma_repcity.csv')
-kma_zip <- read.csv('kma_zip.csv')
 
 ui <- fluidPage(
-  titlePanel("Transcore Rate Explorer"),
+  titlePanel("Googleway Map POC"),
   
   sidebarLayout(position = "right",
                 sidebarPanel(
                              textInput("from","From ZIP"),
                              textInput("to","To ZIP"),
-                             checkboxGroupInput("mode","Mode",choices = list("Van","Reefer","Flatbed"), selected = "Van"),
-                             actionButton("fetch", label="Get Rates"),
+                             actionButton("fetch", label="Get Route"),
                              br(),
                              br(),
                              textOutput('miles')
                              ),
                 mainPanel(
-                  img(src="HubHeader.png"),
                   google_mapOutput("map")
                   )
                 )
@@ -73,10 +61,7 @@ server <- function(input, output) {
       add_polylines(polyline=directions$routes$overview_polyline$points)
     
   })
-  
-
-  
+    
 }
-  
-  
+
 shinyApp(ui = ui, server = server)
